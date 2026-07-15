@@ -5,23 +5,21 @@ export default function Footer() {
         <div>
           <img src="/logo.jpeg" alt="Casanossa Imobiliária" className="h-10 w-auto mb-4 object-contain opacity-90" />
           <p className="text-gray-300 mb-2 font-medium">Desde 1984</p>
-          <p className="text-gray-300 text-sm">CRECI: J-XXXX</p>
+          <p className="text-gray-300 text-sm">CRECI: J-3825 / F-0942</p>
         </div>
         <div>
           <h3 className="text-lg font-semibold mb-4 text-marca-claro tracking-widest">CONTATO</h3>
           <p className="text-gray-300 text-sm mb-2">Ariquemes / RO</p>
-          <p className="text-gray-300 text-sm mb-2">Endereço da Imobiliária, Centro</p>
-          <p className="text-gray-300 text-sm mb-2">Telefone: (69) 3535-0000</p>
-          <p className="text-gray-300 text-sm">E-mail: contato@casanossa.com.br</p>
+          <p className="text-gray-300 text-sm mb-2">Travessa Violeta, 3861, Setor 04 - Ariquemes/RO</p>
+          <p className="text-gray-300 text-sm mb-2">Telefone: (69) 3535-7090</p>
+          <p className="text-gray-300 text-sm mb-2">WhatsApp: (69) 9.8408-6548</p>
+          <p className="text-gray-300 text-sm">E-mail: casanossa_imobiliaria@hotmail.com</p>
         </div>
         <div>
           <h3 className="text-lg font-semibold mb-4 text-marca-claro tracking-widest">REDES SOCIAIS</h3>
           <div className="flex flex-col space-y-2">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+            <a href="https://instagram.com/imobiliariacasanossa" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
               Instagram
-            </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
-              Facebook
             </a>
           </div>
         </div>

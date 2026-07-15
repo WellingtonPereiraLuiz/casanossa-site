@@ -21,6 +21,7 @@ export default function PropertiesListing() {
   });
 
   useEffect(() => {
+    document.title = "Casanossa | Nossos Imóveis";
     async function loadProperties() {
       const { data, error } = await supabase
         .from('properties')
@@ -51,8 +52,8 @@ export default function PropertiesListing() {
   const filteredProperties = properties.filter(prop => {
     if (filters.finalidade && prop.finalidade !== filters.finalidade) return false;
     if (filters.categoria && prop.categoria !== filters.categoria) return false;
-    if (filters.tipo && prop.tipo.toLowerCase() !== filters.tipo.toLowerCase()) return false;
-    if (filters.bairro && prop.bairro.toLowerCase() !== filters.bairro.toLowerCase()) return false;
+    if (filters.tipo && prop.tipo?.toLowerCase() !== filters.tipo.toLowerCase()) return false;
+    if (filters.bairro && prop.bairro?.toLowerCase() !== filters.bairro.toLowerCase()) return false;
     if (filters.quartos && prop.quartos < parseInt(filters.quartos)) return false;
     if (filters.banheiros && prop.banheiros < parseInt(filters.banheiros)) return false;
     if (filters.vagas && prop.vagas < parseInt(filters.vagas)) return false;
@@ -177,7 +178,7 @@ export default function PropertiesListing() {
           ) : filteredProperties.length === 0 ? (
             <div className="bg-white p-12 rounded-lg shadow-sm border border-gray-100 text-center">
               <p className="text-xl text-slate-500 mb-4">Nenhum imóvel encontrado com esses filtros.</p>
-              <button onClick={() => window.location.reload()} className="text-marca-primaria font-bold underline hover:text-blue-800">Limpar filtros</button>
+              <button onClick={() => setFilters({ finalidade: '', categoria: '', tipo: '', bairro: '', minPrice: '', maxPrice: '', quartos: '', banheiros: '', vagas: '' })} className="text-marca-primaria font-bold underline hover:text-blue-800">Limpar filtros</button>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

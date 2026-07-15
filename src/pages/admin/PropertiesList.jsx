@@ -213,7 +213,7 @@ export default function PropertiesList() {
                     </td>
                     <td className="p-4">
                       <span className={`px-2 py-1 text-[10px] font-bold rounded uppercase tracking-wider text-white ${prop.status === 'disponivel' ? 'bg-[#25D366]' : 'bg-slate-400'}`}>
-                        {prop.status}
+                        {{ disponivel: 'Disponível', alugado: 'Alugado', vendido: 'Vendido' }[prop.status] || prop.status}
                       </span>
                     </td>
                     <td className="p-4">

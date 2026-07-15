@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../services/supabase';
-import { Eye, Trash2, X, Phone, Copy, CheckSquare, Square, ChevronDown, MailOpen, Mail } from 'lucide-react';
+import { Trash2, X, Phone, Copy, CheckSquare, Square, ChevronDown, MailOpen, Mail } from 'lucide-react';
 
 export default function LeadsList() {
   const [leads, setLeads] = useState([]);
@@ -108,15 +108,7 @@ export default function LeadsList() {
     window.open(`https://wa.me/55${limpo}?text=Olá, vi que você entrou em contato pelo site da Casanossa. Como posso ajudar?`, '_blank');
   };
 
-  const viewLead = async (lead) => {
-    setSelectedLead(lead);
-    setShowFullMessage(false);
-    // Marca como lido automaticamente ao abrir
-    if (lead.status !== 'lido') {
-      await supabase.from('leads').update({ status: 'lido' }).eq('id', lead.id);
-      setLeads(leads.map(l => l.id === lead.id ? { ...l, status: 'lido' } : l));
-    }
-  };
+
 
   return (
     <div>

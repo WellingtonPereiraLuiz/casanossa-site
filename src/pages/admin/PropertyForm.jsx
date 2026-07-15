@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { supabase } from '../../services/supabase';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Save, ArrowLeft, ImagePlus, X, Plus, Trash2 } from 'lucide-react';
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -15,6 +15,14 @@ function LocationMarker({ position, setPosition }) {
     click(e) { setPosition(e.latlng); }
   });
   return position ? <Marker position={position} /> : null;
+}
+
+function RecenterMap({ lat, lng }) {
+  const map = useMap();
+  useEffect(() => {
+    map.flyTo([lat, lng]);
+  }, [lat, lng, map]);
+  return null;
 }
 
 export default function PropertyForm() {
@@ -277,7 +285,7 @@ export default function PropertyForm() {
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-2">Ambientes (Ex: Sala de TV, Suíte Master)</label>
               <div className="flex gap-2 mb-4">
-                <input type="text" value={ambienteInput} onChange={e => setAmbienteInput(e.target.value)} onKeyPress={e => e.key === 'Enter' && (e.preventDefault(), handleArrayAdd('ambientes', ambienteInput, setAmbienteInput))} className="flex-1 p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-marca-primaria" placeholder="Digite e aperte Enter ou Add" />
+                <input type="text" value={ambienteInput} onChange={e => setAmbienteInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleArrayAdd('ambientes', ambienteInput, setAmbienteInput))} className="flex-1 p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-marca-primaria" placeholder="Digite e aperte Enter ou Add" />
                 <button type="button" onClick={() => handleArrayAdd('ambientes', ambienteInput, setAmbienteInput)} className="bg-marca-primaria text-white px-4 rounded-lg font-bold hover:bg-blue-800 transition-colors">Add</button>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -291,7 +299,7 @@ export default function PropertyForm() {
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-2">Complementos (Ex: Piscina, Churrasqueira)</label>
               <div className="flex gap-2 mb-4">
-                <input type="text" value={complementoInput} onChange={e => setComplementoInput(e.target.value)} onKeyPress={e => e.key === 'Enter' && (e.preventDefault(), handleArrayAdd('complementos', complementoInput, setComplementoInput))} className="flex-1 p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-marca-primaria" placeholder="Digite e aperte Enter ou Add" />
+                <input type="text" value={complementoInput} onChange={e => setComplementoInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleArrayAdd('complementos', complementoInput, setComplementoInput))} className="flex-1 p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-marca-primaria" placeholder="Digite e aperte Enter ou Add" />
                 <button type="button" onClick={() => handleArrayAdd('complementos', complementoInput, setComplementoInput)} className="bg-marca-primaria text-white px-4 rounded-lg font-bold hover:bg-blue-800 transition-colors">Add</button>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -340,7 +348,8 @@ export default function PropertyForm() {
             </div>
             <div className="h-[300px] w-full rounded-xl overflow-hidden border border-gray-300 z-0 relative">
               <MapContainer center={[form.latitude, form.longitude]} zoom={14} style={{ height: '100%', width: '100%' }}>
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
+                <RecenterMap lat={form.latitude} lng={form.longitude} />
                 <LocationMarker 
                   position={{lat: form.latitude, lng: form.longitude}} 
                   setPosition={(pos) => setForm({...form, latitude: pos.lat, longitude: pos.lng})} 

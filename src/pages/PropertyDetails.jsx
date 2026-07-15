@@ -38,6 +38,7 @@ export default function PropertyDetails() {
 
   useEffect(() => {
     async function loadPropertyAndAnalytics() {
+      document.title = `Casanossa | Detalhes do Imóvel`;
       // Registrar Analytics (Page View) silenciosamente
       try {
         await supabase.from('page_views').insert({ caminho: `/imovel/${id}`, property_id: id });
@@ -213,7 +214,7 @@ export default function PropertyDetails() {
               <h1 className="text-3xl md:text-5xl font-black text-slate-800 mb-4">{property.titulo}</h1>
               <div className="flex items-center gap-3">
                 <span className={`px-4 py-1 text-sm font-bold rounded-full uppercase tracking-wider text-white ${property.status === 'disponivel' ? 'bg-[#25D366]' : 'bg-slate-400'}`}>
-                  {property.status}
+                  {{ disponivel: 'Disponível', alugado: 'Alugado', vendido: 'Vendido' }[property.status] || property.status}
                 </span>
                 <span className="text-sm font-bold text-slate-500 font-mono tracking-widest bg-gray-100 px-3 py-1 rounded-md border border-gray-200">CÓD. {property.codigo}</span>
               </div>
@@ -224,8 +225,8 @@ export default function PropertyDetails() {
 
       {/* Galeria Grid */}
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className={`grid gap-2 ${imagens.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-4'} h-[50vh] md:h-[60vh] rounded-2xl overflow-hidden cursor-pointer`} onClick={() => setLightboxOpen(true)}>
-          <div className={`${imagens.length === 1 ? 'md:col-span-1' : 'md:col-span-3'} relative group overflow-hidden bg-gray-200`}>
+        <div className={`grid gap-2 ${imagens.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-4'} h-[50vh] md:h-[60vh] rounded-2xl overflow-hidden cursor-pointer`}>
+          <div className={`${imagens.length === 1 ? 'md:col-span-1' : 'md:col-span-3'} relative group overflow-hidden bg-gray-200`} onClick={() => { setMainImageIndex(0); setLightboxOpen(true); }}>
              <img src={imagens[0].url} alt={property.titulo} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                <span className="text-white font-bold bg-black/50 px-6 py-2 rounded-full border border-white/30 backdrop-blur-sm">Ampliar Galeria</span>
@@ -234,7 +235,7 @@ export default function PropertyDetails() {
           {imagens.length > 1 && (
             <div className="hidden md:flex flex-col gap-2">
               {imagens.slice(1, 3).map((img, idx) => (
-                <div key={idx} className="relative group overflow-hidden bg-gray-200 h-1/2">
+                <div key={idx} className="relative group overflow-hidden bg-gray-200 h-1/2" onClick={() => { setMainImageIndex(idx + 1); setLightboxOpen(true); }}>
                   <img src={img.url} alt={`Minha ${idx}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   {idx === 1 && imagens.length > 3 && (
                     <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
@@ -395,7 +396,7 @@ export default function PropertyDetails() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="w-full h-[300px] bg-gray-200 relative z-0 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
             <MapContainer center={[property.latitude, property.longitude]} zoom={16} style={{ height: '100%', width: '100%' }}>
-              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
               <Marker position={[property.latitude, property.longitude]}>
                 <Popup>
                   <div className="text-center font-sans">

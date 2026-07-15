@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, MapPin, Building, Key, Star, BedDouble, Bath, Car, Ruler } from 'lucide-react';
 import { supabase } from '../services/supabase';
+import heroImg from '../assets/hero.png';
 
 export default function Home() {
   const [destaques, setDestaques] = useState([]);
@@ -21,6 +22,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = "Casanossa | Imóveis";
     async function loadData() {
       // Buscar opções únicas do banco de dados (Bairros e Tipos) para o filtro
       const { data: filterData } = await supabase.from('properties').select('bairro, tipo').eq('status', 'disponivel');
@@ -84,7 +86,7 @@ export default function Home() {
       <section className="relative h-[600px] flex items-center justify-center">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80" 
+            src={heroImg} 
             alt="Casanossa Imóveis" 
             className="w-full h-full object-cover brightness-[0.4]"
           />
