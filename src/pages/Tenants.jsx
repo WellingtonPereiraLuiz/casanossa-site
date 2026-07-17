@@ -1,6 +1,11 @@
+import { useEffect } from 'react';
 import { FileText, Home, KeyRound } from 'lucide-react';
 
 export default function Tenants() {
+  useEffect(() => {
+    document.title = "Casanossa | Inquilino";
+  }, []);
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-12 min-h-[60vh]">
       <h1 className="text-3xl font-bold text-marca-primaria mb-10 tracking-widest uppercase border-b-2 border-marca-claro pb-4 max-w-4xl mx-auto text-center md:text-left">Área do Inquilino</h1>

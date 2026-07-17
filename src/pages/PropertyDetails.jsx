@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../services/supabase';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -21,6 +21,9 @@ export default function PropertyDetails() {
   
   // Imóveis Semelhantes
   const [semelhantes, setSemelhantes] = useState([]);
+  
+  // Ref para evitar contagem duplicada
+  const pageViewRecorded = useRef(false);
 
   // Modal Agendamento
   const [modalOpen, setModalOpen] = useState(false);
@@ -39,15 +42,18 @@ export default function PropertyDetails() {
   useEffect(() => {
     async function loadPropertyAndAnalytics() {
       document.title = `Casanossa | Detalhes do Imóvel`;
-      // Registrar Analytics (Page View) silenciosamente
-      try {
-        await supabase.from('page_views').insert({ caminho: `/imovel/${id}`, property_id: id });
-      } catch (e) {
-        // Ignora erros de analytics
+      // Registrar Analytics (Page View) silenciosamente, só uma vez
+      if (!pageViewRecorded.current) {
+        pageViewRecorded.current = true;
+        try {
+          await supabase.from('page_views').insert({ caminho: `/imovel/${id}`, property_id: id });
+        } catch {
+          // Ignora erros de analytics
+        }
       }
 
       // Buscar imóvel
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('properties')
         .select(`*, property_images(*)`)
         .eq('id', id)
@@ -60,15 +66,19 @@ export default function PropertyDetails() {
         setProperty(data);
         
         // Lógica Forte de Imóveis Semelhantes
-        // 1. Busca imóveis disponíveis, da mesma finalidade (venda/locação) e tipo (Casa, Apto, etc)
-        const { data: simData } = await supabase
+        // 1. Busca imóveis disponíveis, da mesma finalidade (venda/locação)
+        let querySemelhantes = supabase
           .from('properties')
           .select('id, titulo, preco, finalidade, tipo, bairro, cidade, uf, quartos, banheiros, vagas, area_m2, property_images(url, posicao)')
           .eq('status', 'disponivel')
           .neq('id', id)
-          .eq('finalidade', data.finalidade)
-          .eq('tipo', data.tipo)
-          .limit(15);
+          .eq('finalidade', data.finalidade);
+          
+        if (data.tipo) {
+          querySemelhantes = querySemelhantes.eq('tipo', data.tipo);
+        }
+        
+        const { data: simData } = await querySemelhantes.limit(15);
           
         if (simData) {
           // 2. Cria um sistema de pontuação para encontrar os mais parecidos

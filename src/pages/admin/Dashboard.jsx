@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
-import { Home, Users, CheckCircle, TrendingUp, Eye } from 'lucide-react';
+import { Home, Users, TrendingUp, Eye } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
@@ -16,6 +16,7 @@ export default function Dashboard() {
   
   const [recentes, setRecentes] = useState([]);
   const [topImoveis, setTopImoveis] = useState([]);
+  const [visitasDiarias, setVisitasDiarias] = useState([]);
 
   useEffect(() => {
     async function loadData() {
@@ -50,24 +51,21 @@ export default function Dashboard() {
         .limit(5);
       setRecentes(ultimos || []);
 
-      // Top Imóveis (Simplificado - SQL manual seria ideal, mas fazemos em JS pra facilitar)
-      // Como não temos RPC, vamos pegar as page views recentes que tem property_id
-      const { data: views } = await supabase.from('page_views').select('property_id').not('property_id', 'is', null);
-      if (views) {
-        const contagem = {};
-        views.forEach(v => {
-          contagem[v.property_id] = (contagem[v.property_id] || 0) + 1;
-        });
-        const topIds = Object.keys(contagem).sort((a, b) => contagem[b] - contagem[a]).slice(0, 5);
-        
-        if (topIds.length > 0) {
-          const { data: topProps } = await supabase.from('properties').select('id, titulo, codigo').in('id', topIds);
-          if (topProps) {
-            // Reordenar pelos mais vistos
-            const ordenados = topProps.map(p => ({...p, views: contagem[p.id]})).sort((a,b) => b.views - a.views);
-            setTopImoveis(ordenados);
-          }
-        }
+      // Top Imóveis (RPC)
+      const { data: topProps } = await supabase.rpc('imoveis_mais_vistos', { limite: 5 });
+      if (topProps) {
+        // Formatar para o componente existente
+        const ordenados = topProps.map(p => ({
+          ...p, 
+          views: p.visitas || p.total_visitas || p.views || p.total || 0 
+        }));
+        setTopImoveis(ordenados);
+      }
+
+      // Visitas por dia (RPC)
+      const { data: visitasDiariasData } = await supabase.rpc('visitas_por_dia', { dias: 7 });
+      if (visitasDiariasData) {
+        setVisitasDiarias(visitasDiariasData);
       }
     }
     loadData();
@@ -190,7 +188,34 @@ export default function Dashboard() {
             </table>
           </div>
         </div>
+      </div>
 
+      {/* Gráfico Visitas por Dia */}
+      <div className="mt-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2"><Eye size={20} className="text-marca-primaria" /> Visitas nos últimos 7 dias</h2>
+        {visitasDiarias.length === 0 ? (
+          <p className="text-slate-500 py-4 text-center">Nenhum dado de acesso nos últimos dias.</p>
+        ) : (
+          <div className="flex items-end justify-between h-48 gap-2 pt-4">
+            {visitasDiarias.map((item, i) => {
+              const valor = item.visitas || item.total_visitas || item.total || 0;
+              const maxVisitas = Math.max(...visitasDiarias.map(d => d.visitas || d.total_visitas || d.total || 0), 1);
+              const alturaPercentual = (valor / maxVisitas) * 100;
+              const dataFormatada = new Date(item.dia || item.data).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+              
+              return (
+                <div key={i} className="flex flex-col items-center flex-1 group">
+                  <span className="text-xs font-bold text-slate-500 mb-2 opacity-0 group-hover:opacity-100 transition-opacity">{valor}</span>
+                  <div 
+                    className="w-full max-w-[40px] bg-marca-primaria/80 hover:bg-marca-primaria rounded-t-md transition-all duration-500" 
+                    style={{ height: `${Math.max(alturaPercentual, 2)}%` }}
+                  ></div>
+                  <span className="text-xs text-slate-400 mt-2 rotate-45 origin-left md:rotate-0">{dataFormatada}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

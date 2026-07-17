@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { UserCheck, Key, LineChart } from 'lucide-react';
 
 export default function Services() {
+  useEffect(() => {
+    document.title = "Casanossa | Serviços";
+  }, []);
+
   const servicesList = [
     {
       title: 'Manual do Proprietário',

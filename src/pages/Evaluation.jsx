@@ -1,6 +1,11 @@
+import { useEffect } from 'react';
 import { LineChart, MessageCircle, HelpCircle } from 'lucide-react';
 
 export default function Evaluation() {
+  useEffect(() => {
+    document.title = "Casanossa | Avaliação de Imóveis";
+  }, []);
+
   const wppText = "Olá! Gostaria de solicitar uma avaliação técnica do meu imóvel. Como funciona?";
   const wppLink = `https://wa.me/5569984086548?text=${encodeURIComponent(wppText)}`;
 

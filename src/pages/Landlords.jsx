@@ -1,6 +1,11 @@
+import { useEffect } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 
 export default function Landlords() {
+  useEffect(() => {
+    document.title = "Casanossa | Proprietários";
+  }, []);
+
   const topics = [
     { title: 'Disponibilizando seu imóvel', text: 'Avaliação gratuita do valor de locação, feita por profissionais dedicados.' },
     { title: 'Documentos necessários', text: 'Documentos pessoais; título de propriedade (escritura/matrícula/contrato); faturas de água, luz, IPTU e condomínio se houver.' },

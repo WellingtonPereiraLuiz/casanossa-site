@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { supabase } from '../../services/supabase';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { Save, ArrowLeft, ImagePlus, X, Plus, Trash2 } from 'lucide-react';
+import { Save, ArrowLeft, ImagePlus, X, Trash2 } from 'lucide-react';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
@@ -65,6 +65,7 @@ export default function PropertyForm() {
       loadProperty();
       loadImages();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   async function loadProperty() {
@@ -76,7 +77,7 @@ export default function PropertyForm() {
   }
 
   async function loadImages() {
-    const { data, error } = await supabase.from('property_images').select('*').eq('property_id', id).order('posicao', { ascending: true });
+    const { data } = await supabase.from('property_images').select('*').eq('property_id', id).order('posicao', { ascending: true });
     if (data) setImages(data);
   }
 
@@ -139,7 +140,10 @@ export default function PropertyForm() {
       };
 
       if (isEdit) {
-        const { error } = await supabase.from('properties').update(payload).eq('id', propertyId);
+        const payloadUpdate = { ...payload };
+        delete payloadUpdate.id;
+        delete payloadUpdate.criado_em;
+        const { error } = await supabase.from('properties').update(payloadUpdate).eq('id', propertyId);
         if (error) throw error;
       } else {
         const { data, error } = await supabase.from('properties').insert([payload]).select().single();

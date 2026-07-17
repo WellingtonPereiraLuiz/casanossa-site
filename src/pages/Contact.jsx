@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, MessageCircle, Send, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../services/supabase';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -17,6 +17,10 @@ L.Marker.prototype.options.icon = DefaultIcon;
 export default function Contact() {
   const [formData, setFormData] = useState({ nome: '', telefone: '', email: '', mensagem: '' });
   const [status, setStatus] = useState({ loading: false, success: false, error: null });
+
+  useEffect(() => {
+    document.title = "Casanossa | Contato";
+  }, []);
 
   const formatPhone = (val) => {
     if (!val) return '';

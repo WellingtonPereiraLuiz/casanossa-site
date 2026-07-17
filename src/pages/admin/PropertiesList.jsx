@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../services/supabase';
+import { excluirImovelComFotos } from '../../services/properties';
 import { Plus, Edit, Trash2, CheckSquare, Square, ChevronDown, Search, Share2, X, FileText } from 'lucide-react';
 
 export default function PropertiesList() {
@@ -37,7 +38,7 @@ export default function PropertiesList() {
 
   const handleDelete = async (id) => {
     if (window.confirm('Tem certeza que deseja excluir este imóvel permanentemente?')) {
-      const { error } = await supabase.from('properties').delete().eq('id', id);
+      const { error } = await excluirImovelComFotos(id);
       if (error) {
         alert('Erro ao excluir imóvel. Verifique o console.');
         console.error(error);
@@ -77,7 +78,7 @@ export default function PropertiesList() {
 
   const handleBulkDelete = async () => {
     if (window.confirm(`Tem certeza que deseja apagar ${selectedIds.length} imóvel(is)?`)) {
-      await supabase.from('properties').delete().in('id', selectedIds);
+      await Promise.all(selectedIds.map(id => excluirImovelComFotos(id)));
       setProperties(properties.filter(p => !selectedIds.includes(p.id)));
       setSelectedIds([]);
       setShowActions(false);
