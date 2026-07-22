@@ -5,12 +5,13 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import PropertiesListing from './pages/PropertiesListing';
 import Services from './pages/Services';
-import Contact from './pages/Contact';
+
 import Landlords from './pages/Landlords';
 import Evaluation from './pages/Evaluation';
 import Tenants from './pages/Tenants';
 
 const PropertyDetails = lazy(() => import('./pages/PropertyDetails'));
+const Contact = lazy(() => import('./pages/Contact'));
 
 // Admin imports
 import ProtectedRoute from './components/ProtectedRoute';
