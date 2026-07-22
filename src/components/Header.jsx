@@ -16,10 +16,10 @@ export default function Header() {
   return (
     <header className="fixed w-full bg-white shadow-md z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center py-4">
           <div className="flex-shrink-0 flex items-center">
             <Link to="/">
-              <img src="/logo.jpeg" alt="Casanossa Imobiliária" className="h-12 w-auto object-contain" />
+              <img src="/logo.png" alt="Casanossa Imobiliária" className="h-24 w-auto object-contain" />
             </Link>
           </div>
           

@@ -69,8 +69,8 @@ export default function Contact() {
         {/* Esquerda: Info e Mapa */}
         <div className="space-y-8">
           <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center sm:text-left flex flex-col sm:flex-row items-center sm:items-start gap-6">
-            <div className="bg-marca-claro p-4 rounded-xl">
-              <img src="/logo.jpeg" alt="Casanossa Imobiliária" className="h-10 w-auto object-contain" />
+            <div className="bg-white p-5 rounded-2xl shadow-xl ring-1 ring-gray-100 border-b-4 border-marca-primaria shrink-0 transition-transform hover:-translate-y-1">
+              <img src="/logo.png" alt="Casanossa Imobiliária" className="h-20 w-auto object-contain" />
             </div>
             <div>
               <p className="text-slate-600 mb-6 font-medium leading-relaxed">Desde 1984, oferecendo as melhores soluções imobiliárias para Ariquemes e região.</p>

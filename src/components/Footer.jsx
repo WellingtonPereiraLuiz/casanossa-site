@@ -3,7 +3,9 @@ export default function Footer() {
     <footer className="bg-marca-escuro text-white pt-12 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <img src="/logo.jpeg" alt="Casanossa Imobiliária" className="h-10 w-auto mb-4 object-contain opacity-90" />
+          <div className="bg-white p-3 rounded-2xl shadow-lg inline-block mb-6 ring-4 ring-marca-claro/20 transition-transform hover:scale-105">
+            <img src="/logo.png" alt="Casanossa Imobiliária" className="h-20 w-auto object-contain" />
+          </div>
           <p className="text-gray-300 mb-2 font-medium">Desde 1984</p>
           <p className="text-gray-300 text-sm">CRECI: J-3825 / F-0942</p>
         </div>

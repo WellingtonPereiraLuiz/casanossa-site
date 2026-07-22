@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, MapPin, Building, Key, Star, BedDouble, Bath, Car, Ruler } from 'lucide-react';
 import { supabase } from '../services/supabase';
-import heroImage from '../assets/hero.png';
 
 export default function Home() {
   const [destaques, setDestaques] = useState([]);
@@ -86,7 +85,7 @@ export default function Home() {
       <section className="relative h-[600px] flex items-center justify-center">
         <div className="absolute inset-0 z-0">
           <img 
-            src={heroImage} 
+            src="/imagen_de_fundo.jpg" 
             alt="Casanossa Imóveis" 
             className="w-full h-full object-cover brightness-[0.4]"
           />
